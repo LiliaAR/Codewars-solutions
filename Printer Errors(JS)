@@ -1,0 +1,18 @@
+function printerError(s) {
+    let errors = 0;
+
+    for (let char of s) {
+        if (char < 'a' || char > 'm') {
+            errors++;
+        }
+    }
+
+    return `${errors}/${s.length}`;
+}
+
+// Example Tests
+console.log(printerError("aaabbbbhaijjjm")); // Expected output: "0/14"
+console.log(printerError("aaaxbbbbyyhwawiwjjjwwm")); // Expected output: "8/22"
+console.log(printerError("abcdefghijklm")); // Expected output: "0/13"
+console.log(printerError("nopqrstuvwxyz")); // Expected output: "13/13"
+console.log(printerError("abcxyz")); // Expected output: "3/6"
