@@ -1,0 +1,41 @@
+function hasPermission(permissions, resource) {
+    let specificAllow = false; // Flag for specific allows
+    let specificDeny = false;  // Flag for specific denies
+    let globalAllow = false;    // Flag for global allows
+    let globalDeny = false;     // Flag for global denies
+
+    for (let permission of permissions) {
+        const [dataType, action] = permission.split('_');
+
+        if (dataType === '*') {
+            // Global permissions
+            if (action === 'allow') {
+                globalAllow = true; // Set flag to allow everything
+            } else if (action === 'deny') {
+                globalDeny = true; // Set flag to deny everything
+            }
+        } else if (dataType === resource) {
+            // Specific resource permissions
+            if (action === 'allow') {
+                specificAllow = true; // Set specific allow
+            } else if (action === 'deny') {
+                specificDeny = true; // Set specific deny
+            }
+        }
+    }
+
+    // Determine final permission
+    if (specificDeny) return false; // Deny if specific deny found
+    if (specificAllow) return true;  // Allow if specific allow found
+    if (globalDeny) return false;    // Deny if any global deny found
+    if (globalAllow) return true;     // Allow if any global allow found
+
+    // If neither specific nor global permissions apply, default to false
+    return false;
+}
+
+// Example Tests
+console.log(hasPermission(["books_allow", "movies_deny"], "movies")); // Expected: false
+console.log(hasPermission(["books_allow", "movies_deny"], "books")); // Expected: true
+console.log(hasPermission(["*_allow", "books_allow", "movies_deny"], "games")); // Expected: true
+console.log(hasPermission(["*_allow", "*_deny"], "movies")); // Expected: false
