@@ -1,0 +1,10 @@
+function countBits(n) {
+  // Convert the number to binary string representation
+  const binary = n.toString(2);
+  
+  // Split the string into an array, filter out the '1's, and count them
+  return binary.split('').filter(bit => bit === '1').length;
+}
+
+// Example usage:
+console.log(countBits(1234)); // Output: 5
