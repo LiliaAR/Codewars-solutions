@@ -1,0 +1,6 @@
+class String
+  def toJadenCase
+    # Split the string into words, capitalize each word, then join them back together
+    self.split.map { |word| word.capitalize }.join(' ')
+  end
+end
