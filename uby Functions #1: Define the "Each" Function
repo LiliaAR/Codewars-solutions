@@ -1,0 +1,9 @@
+class Array
+  def each
+    # Loop through each element in the array
+    for i in 0...self.length
+      yield(self[i])  # Yield each element to the block
+    end
+    self  # Return the original array
+  end
+end
