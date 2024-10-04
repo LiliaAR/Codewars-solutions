@@ -1,0 +1,18 @@
+def tribonacci(signature, n)
+  return [] if n == 0                    
+  # Handle edge case when n == 0
+  return signature.first(n) if n <= 3     
+  # Return first n elements if n <= 3
+  
+  result = signature.dup                  
+  # Duplicate the signature array to avoid modifying it
+
+  # Generate the rest of the sequence until we have n elements
+  (3...n).each do
+    result << result[-1] + result[-2] + result[-3]  
+    # Sum the last 3 elements
+  end
+
+  result                                   
+  # Return the result array
+end
