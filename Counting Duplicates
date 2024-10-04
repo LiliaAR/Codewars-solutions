@@ -1,0 +1,31 @@
+function duplicateCount(string) {
+    // Convert the string to lowercase to make it case-insensitive
+    let lowerCaseString = string.toLowerCase();
+    
+    // Create an object to store the frequency of each character
+    let charCount = {};
+    
+    // Count the occurrences of each character
+    for (let char of lowerCaseString) {
+        charCount[char] = (charCount[char] || 0) + 1;
+    }
+    
+    // Count distinct characters that occur more than once
+    let duplicateCount = 0;
+    for (let char in charCount) {
+        if (charCount[char] > 1) {
+            duplicateCount++;
+        }
+    }
+    
+    return duplicateCount;
+}
+
+// Example usage
+console.log(duplicateCount("abcde")); // 0
+console.log(duplicateCount("aabbcde")); // 2
+console.log(duplicateCount("aabBcde")); // 2
+console.log(duplicateCount("indivisibility")); // 1
+console.log(duplicateCount("Indivisibilities")); // 2
+console.log(duplicateCount("aA11")); // 2
+console.log(duplicateCount("ABBA")); // 2
