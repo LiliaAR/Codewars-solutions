@@ -1,0 +1,23 @@
+<?php
+function is_prime($n) {
+    // Handle edge cases
+    if ($n <= 1) return false; // 0, 1, and negative numbers are not prime
+    if ($n == 2) return true;  // 2 is the only even prime number
+    if ($n % 2 == 0) return false; // Exclude other even numbers
+    
+    // Check divisibility up to the square root of the number
+    for ($i = 3; $i <= sqrt($n); $i += 2) {
+        if ($n % $i == 0) {
+            return false;
+        }
+    }
+    
+    return true;
+}
+
+// Example usage:
+var_dump(is_prime(1));  // false
+var_dump(is_prime(2));  // true
+var_dump(is_prime(-1)); // false
+var_dump(is_prime(17)); // true
+?>
