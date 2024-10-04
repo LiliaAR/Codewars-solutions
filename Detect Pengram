@@ -1,0 +1,14 @@
+function isPangram(string) {
+    // Convert the string to lowercase and remove non-alphabetic characters
+    let lowerCaseString = string.toLowerCase().replace(/[^a-z]/g, '');
+
+    // Create a Set to store unique letters
+    let letters = new Set(lowerCaseString);
+
+    // Check if the Set contains all 26 letters
+    return letters.size === 26;
+}
+
+// Example usage
+console.log(isPangram("The quick brown fox jumps over the lazy dog")); // true
+console.log(isPangram("Hello, world!")); // false
