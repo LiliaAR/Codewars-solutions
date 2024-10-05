@@ -1,0 +1,15 @@
+function digitalRoot(n) {
+  // Continue summing the digits until a single-digit number is achieved
+  while (n >= 10) {
+    n = n.toString()              
+    // Convert the number to a string
+         .split('')               
+    // Split the string into individual characters (digits)
+         .map(Number)             
+    // Convert each character back into a number
+         .reduce((acc, num) => acc + num, 0); 
+    // Sum the digits
+  }
+  return n; 
+  // Return the final single-digit number
+}
