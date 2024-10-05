@@ -1,0 +1,26 @@
+function dirReduc(arr) {
+  // Define opposites
+  const opposites = {
+    "NORTH": "SOUTH",
+    "SOUTH": "NORTH",
+    "EAST": "WEST",
+    "WEST": "EAST"
+  };
+  
+  // Create a stack to hold simplified directions
+  const stack = [];
+  
+  for (let i = 0; i < arr.length; i++) {
+    const currentDir = arr[i];
+    
+    // If the stack is not empty and the current direction cancels out the last one, pop the last direction
+    if (stack.length > 0 && opposites[currentDir] === stack[stack.length - 1]) {
+      stack.pop();
+    } else {
+      // Otherwise, push the current direction onto the stack
+      stack.push(currentDir);
+    }
+  }
+  
+  return stack;
+}
