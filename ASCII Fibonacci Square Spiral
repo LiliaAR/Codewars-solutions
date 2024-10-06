@@ -1,0 +1,90 @@
+const fibonacciString = (function() {
+  const F = [0, 1];
+
+  // Generate Fibonacci numbers
+  for (let i = 0; i < 17; i++) {
+    F.push(F[F.length - 1] + F[F.length - 2]);
+  }
+
+  const G = [];
+  
+  // Create dimensions for Fibonacci squares
+  for (let i = 0; i < F.length - 2; i++) {
+    let h = F[i + 2], w = Math.max(1, F[i + 1]);
+    if (i % 2 === 1) [h, w] = [w, h];
+    G.push([h, w]);
+  }
+
+  function f(n) {
+    if (n === 0) {
+      return [["┌", "─", "┐"], ["└", "─", "┘"]];
+    }
+
+    const prev = f(n - 1);
+    const dir = n % 4;
+    const [sh, sw] = G[n];
+    const h = sh + 1;
+    const w = 2 * sw + 1;
+
+    const m = Array.from({ length: h }, () => Array(w).fill(" "));
+
+    const y0 = dir === 2 ? h - prev.length : 0;
+    const x0 = dir === 3 ? w - prev[0].length : 0;
+
+    // Place the previous Fibonacci square in the current matrix
+    for (let y = 0; y < prev.length; y++) {
+      for (let x = 0; x < prev[0].length; x++) {
+        m[y + y0][x + x0] = prev[y][x];
+      }
+    }
+
+    // Define the borders based on direction
+    switch (dir) {
+      case 0:
+        m[prev.length - 1][0] = "├";
+        m[prev.length - 1][w - 1] = "┤";
+        m[h - 1][0] = "└";
+        m[h - 1][w - 1] = "┘";
+        for (let x = 1; x < w - 1; x++) m[h - 1][x] = "─";
+        for (let y = prev.length; y < h - 1; y++) m[y][0] = m[y][w - 1] = "│";
+        break;
+      case 1:
+        m[0][prev[0].length - 1] = "┬";
+        m[h - 1][prev[0].length - 1] = "┴";
+        m[0][w - 1] = "┐";
+        m[h - 1][w - 1] = "┘";
+        for (let x = prev[0].length; x < w - 1; x++) {
+          m[0][x] = m[h - 1][x] = "─";
+        }
+        for (let y = 1; y < h - 1; y++) m[y][w - 1] = "│";
+        break;
+      case 2:
+        m[h - prev.length][0] = "├";
+        m[h - prev.length][w - 1] = "┤";
+        m[0][0] = "┌";
+        m[0][w - 1] = "┐";
+        for (let x = 1; x < w - 1; x++) m[0][x] = "─";
+        for (let y = 1; y < h - prev.length; y++) {
+          m[y][0] = m[y][w - 1] = "│";
+        }
+        break;
+      case 3:
+        m[0][w - prev[0].length] = "┬";
+        m[h - 1][w - prev[0].length] = "┴";
+        m[0][0] = "┌";
+        m[h - 1][0] = "└";
+        for (let x = 1; x < w - prev[0].length; x++) {
+          m[0][x] = m[h - 1][x] = "─";
+        }
+        for (let y = 1; y < h - 1; y++) m[y][0] = "│";
+        break;
+    }
+
+    return m;
+  }
+  
+  return n => {
+    const m = f(n);
+    return m.map(r => r.join("")).join("\n");
+  }
+})();
