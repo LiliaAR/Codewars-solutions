@@ -1,0 +1,66 @@
+function fill(arr, method) {
+  const copyArr = [...arr]; // Create a copy to avoid modifying the original array
+
+  // Backward fill (method -1)
+  if (method === -1) {
+    for (let i = 0; i < arr.length; i++) {
+      if (typeof arr[i] === "undefined") {
+        for (let j = i + 1; j < arr.length; j++) {
+          if (typeof arr[j] !== "undefined") {
+            copyArr[i] = arr[j]; // Fill with the next known value
+            break;
+          }
+        }
+      }
+    }
+  }
+
+  // Nearest fill (method 0 or undefined)
+  if (method === 0 || typeof method === "undefined") {
+    for (let i = 0; i < arr.length; i++) {
+      if (typeof arr[i] === "undefined") {
+        for (let j = 1; j < arr.length; j++) {
+          const forwardIndex = i + j;
+          const backwardIndex = i - j;
+
+          // Check both sides for the nearest known value
+          if (
+            forwardIndex < arr.length &&
+            backwardIndex >= 0 &&
+            typeof arr[forwardIndex] !== "undefined" &&
+            typeof arr[backwardIndex] !== "undefined"
+          ) {
+            copyArr[i] = Math.min(arr[forwardIndex], arr[backwardIndex]);
+            break;
+          }
+
+          if (forwardIndex < arr.length && typeof arr[forwardIndex] !== "undefined") {
+            copyArr[i] = arr[forwardIndex]; // Fill with forward known value
+            break;
+          }
+
+          if (backwardIndex >= 0 && typeof arr[backwardIndex] !== "undefined") {
+            copyArr[i] = arr[backwardIndex]; // Fill with backward known value
+            break;
+          }
+        }
+      }
+    }
+  }
+
+  // Forward fill (method 1)
+  if (method === 1) {
+    for (let i = arr.length - 1; i >= 0; i--) {
+      if (typeof arr[i] === "undefined") {
+        for (let j = i - 1; j >= 0; j--) {
+          if (typeof arr[j] !== "undefined") {
+            copyArr[i] = arr[j]; // Fill with the previous known value
+            break;
+          }
+        }
+      }
+    }
+  }
+
+  return copyArr; // Return the filled array
+}
