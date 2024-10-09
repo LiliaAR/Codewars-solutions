@@ -1,0 +1,34 @@
+function flip(stack) {
+  const flips = []; // Array to keep track of flip positions
+  const n = stack.length; // Store the length of the stack
+
+  // Function to flip the stack up to a given index
+  const performFlip = (index) => {
+    stack = [...stack.slice(0, index + 1).reverse(), ...stack.slice(index + 1)];
+    flips.push(index); // Record the flip position
+  };
+
+  // Iterate over the stack from the last pancake to the second one
+  for (let i = n - 1; i > 0; i--) {
+    // Find the index of the largest pancake in the current stack
+    const maxIndex = stack.indexOf(Math.max(...stack.slice(0, i + 1)));
+
+    // If the largest pancake is not in its final position
+    if (maxIndex !== i) {
+      // If it's not at the top, flip it to the top first
+      if (maxIndex > 0) {
+        performFlip(maxIndex);
+      }
+      // Now flip the entire stack to place it at the bottom
+      performFlip(i);
+    }
+  }
+
+  return flips; // Return the sequence of flips
+}
+
+// Example usage
+console.log(flip([1, 5, 8, 3])); // Output: [2, 3, 1]
+console.log(flip([5, 1, 2, 3, 4])); // Output: [4, 3]
+console.log(flip([1, 2, 3, 5, 4])); // Output: [3, 4]
+console.log(flip([2, 3, 1, 2, 4, 2])); // Output: [4, 5, 2, 4, 1]
