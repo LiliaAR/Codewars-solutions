@@ -1,0 +1,16 @@
+function square_digits(int $num): int {
+    // Split the number into its digits as strings
+    $digits = str_split((string)$num);
+    
+    // Map each digit to its square and concatenate the results
+    $squaredDigits = array_map(function($digit) {
+        return (int)$digit ** 2;  // Square each digit
+    }, $digits);
+    
+    // Convert the array of squared digits back to a single integer
+    return (int)implode('', $squaredDigits);
+}
+
+// Example test cases
+echo square_digits(9119); // Outputs: 811181
+echo square_digits(765);   // Outputs: 493625
