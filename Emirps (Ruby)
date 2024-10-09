@@ -1,0 +1,29 @@
+require 'prime'
+
+def find_emirp(n)
+  # Initialize counters for emirps
+  count, largest, sum = 0, 0, 0
+  
+  # Iterate through all primes less than n
+  Prime.each(n - 1) do |prime|  # Prime.each(n) generates primes up to n, but we want below n
+    reversed = prime.to_s.reverse.to_i # Reverse the prime number
+
+    # Check if the reversed number is different and is also prime
+    if reversed != prime && reversed.prime?
+      count += 1
+      largest = prime # Update the largest emirp found
+      sum += prime    # Add to the sum of emirps
+    end
+  end
+  
+  # Return results in the specified format
+  [count, largest, sum]
+end
+
+# Sample Tests
+puts find_emirp(50).inspect   # Expected: [4, 37, 98]
+puts find_emirp(100).inspect  # Expected: [8, 97, 418]
+puts find_emirp(200).inspect  # Expected: [15, 199, 1489]
+puts find_emirp(500).inspect  # Expected: [20, 389, 3232]
+puts find_emirp(750).inspect  # Expected: [25, 743, 6857]
+puts find_emirp(1000).inspect # Expected: [36, 991, 16788]
