@@ -1,0 +1,9 @@
+function squareDigits(num) {
+    // Convert the number to a string to iterate over each digit
+    return parseInt(num.toString().split('').map(digit => digit ** 2).join(''), 10);
+}
+
+// Example usage
+console.log(squareDigits(3212)); // Output: 9414
+console.log(squareDigits(2112)); // Output: 4114
+console.log(squareDigits(0));    // Output: 0
