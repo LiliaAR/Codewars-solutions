@@ -1,0 +1,98 @@
+function boolfuck(code, input = "") {
+    const tape = new Map(); // Infinite tape
+    let pointer = 0; // Pointer starts at the "middle"
+    let inputBits = convertInputToBits(input); // Convert input to bits
+    let inputIndex = 0; // Track position in input bits
+    let outputBits = []; // To collect output bits
+    let codeIndex = 0; // Current position in the code
+    const codeLength = code.length;
+    const loopStack = []; // Stack to manage loops
+
+    // Execute the code
+    while (codeIndex < codeLength) {
+        const command = code[codeIndex];
+
+        switch (command) {
+            case '+':
+                tape.set(pointer, (tape.get(pointer) || 0) ^ 1); // Flip the current bit
+                break;
+            case ',':
+                if (inputIndex < inputBits.length) {
+                    tape.set(pointer, inputBits[inputIndex]); // Read from input
+                    inputIndex++;
+                } else {
+                    tape.set(pointer, 0); // EOF, set current bit to 0
+                }
+                break;
+            case ';':
+                outputBits.push(tape.get(pointer) || 0); // Output the current bit
+                break;
+            case '<':
+                pointer--; // Move left
+                break;
+            case '>':
+                pointer++; // Move right
+                break;
+            case '[':
+                // If the current bit is 0, skip to the matching ']'
+                if (!(tape.get(pointer) || 0)) {
+                    let openBrackets = 1;
+                    while (openBrackets > 0) {
+                        codeIndex++;
+                        if (code[codeIndex] === '[') openBrackets++;
+                        else if (code[codeIndex] === ']') openBrackets--;
+                    }
+                } else {
+                    loopStack.push(codeIndex); // Store the current position for loops
+                }
+                break;
+            case ']':
+                // If the current bit is 1, jump back to the matching '['
+                if (tape.get(pointer) || 0) {
+                    codeIndex = loopStack[loopStack.length - 1]; // Return to last '['
+                } else {
+                    loopStack.pop(); // End the loop
+                }
+                break;
+            default:
+                // Ignore non-command characters
+                break;
+        }
+        codeIndex++;
+    }
+
+    // Convert output bits to characters and handle padding
+    return convertBitsToOutput(outputBits);
+}
+
+// Helper function to convert input characters to bits
+function convertInputToBits(input) {
+    const bits = [];
+    for (const char of input) {
+        const charCode = char.charCodeAt(0);
+        for (let i = 0; i < 8; i++) {
+            bits.push((charCode >> i) & 1); // Extract each bit in little-endian order
+        }
+    }
+    return bits;
+}
+
+// Helper function to convert output bits to a string
+function convertBitsToOutput(bits) {
+    let output = '';
+    for (let i = 0; i < bits.length; i += 8) {
+        const byteBits = bits.slice(i, i + 8);
+        // Pad with zeros if the last byte is not complete
+        if (byteBits.length < 8) {
+            byteBits.push(...Array(8 - byteBits.length).fill(0));
+        }
+        const byte = byteBits.reduce((acc, bit, index) => acc | (bit << index), 0);
+        output += String.fromCharCode(byte);
+    }
+    return output;
+}
+
+// Example usage
+const code = '++[-->+++<];'; // Example Boolfuck code
+const input = 'abc'; // Input string
+console.log(boolfuck(code, input)); // Output
