@@ -1,0 +1,43 @@
+import sys
+sys.setrecursionlimit(5000)
+
+def cargobot(initial_state, programs, max_steps):
+    steps, result, num_states = 0, [state[:] for state in initial_state], len(initial_state)
+    crate_position, crate_state = 0, None
+    
+    def execute_program(program_index):
+        nonlocal crate_state, crate_position, steps, result, num_states
+        
+        for command in programs[program_index]:
+            if steps >= max_steps:
+                break
+            steps += 1
+            
+            # Check if the command is valid based on the crate state
+            if command.flag:
+                if ((command.flag == 'NONE' and crate_state) or
+                    (command.flag == 'ANY' and crate_state is None) or 
+                    (command.flag in {'RED', 'YELLOW', 'GREEN', 'BLUE'} and 
+                     (not crate_state or command.flag != crate_state.color))):
+                    continue
+            
+            # Execute movement commands
+            if command.command == 'RIGHT':
+                crate_position = min(crate_position + 1, num_states - 1)
+            elif command.command == 'LEFT':
+                crate_position = max(crate_position - 1, 0)
+            elif command.command == 'DOWN':
+                if crate_state:
+                    result[crate_position].append(crate_state)
+                    crate_state = None
+                elif result[crate_position]:
+                    crate_state = result[crate_position].pop()
+            
+            # Execute another program if specified
+            if command.command.startswith('PROG'):
+                execute_program(int(command.command[-1]) - 1)
+    
+    # Start executing commands from the first program
+    execute_program(0)
+    
+    return result
