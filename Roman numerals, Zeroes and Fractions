@@ -1,0 +1,40 @@
+def roman_fractions(integer, fraction = 0)
+  # Mapping for integer Roman numerals
+  roman_mapping = {
+    1000 => "M", 900 => "CM", 500 => "D", 400 => "CD",
+    100 => "C", 90 => "XC", 50 => "L", 40 => "XL",
+    10 => "X", 9 => "IX", 5 => "V", 4 => "IV", 1 => "I"
+  }
+
+  # Mapping for Roman fractions
+  fraction_mapping = {
+    0 => "", 1 => ".", 2 => ":", 3 => ":.", 4 => "::",
+    5 => ":.:", 6 => "S", 7 => "S.", 8 => "S:", 9 => "S:.",
+    10 => "S::", 11 => "S:.:", 12 => "I"
+  }
+
+  # Handle out-of-bounds input
+  return "NaR" if integer < 0 || integer > 5000 || fraction < 0 || fraction > 11
+
+  # Handle the integer part
+  if integer == 0 && fraction == 0
+    return "N"
+  elsif integer == 0
+    # Return only the fractional part for zero integer
+    return fraction_mapping[fraction]
+  else
+    # Convert the integer part to Roman numerals
+    roman_result = ""
+    roman_mapping.each do |value, roman|
+      while integer >= value
+        roman_result << roman
+        integer -= value
+      end
+    end
+
+    # Add the fractional part if non-zero
+    roman_result << fraction_mapping[fraction] unless fraction == 0
+
+    return roman_result
+  end
+end
