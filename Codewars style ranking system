@@ -1,0 +1,85 @@
+class User {
+  constructor() {
+    this.rank = -8; // Initialize the user's starting rank
+    this.progress = 0; // Initialize progress to 0
+  }
+
+  // Method to increase progress based on the activity's rank
+  incProgress(activityRank) {
+    // Handle invalid activity ranks
+    if (activityRank < -8 || activityRank > 8 || activityRank === 0) {
+      throw new Error("Invalid rank"); 
+    }
+
+    // If the user is already at the max rank (8), no further progression
+    if (this.rank === 8) return;
+
+    const rankDifference = this.calculateRankDifference(activityRank);
+
+    // If the activity rank is too low, no progress is awarded
+    if (rankDifference <= -2) return;
+
+    // Award progress based on the rank difference
+    if (rankDifference === -1) {
+      this.progress += 1; // Activity is one rank lower
+    } else if (rankDifference === 0) {
+      this.progress += 3; // Activity is at the same rank
+    } else {
+      this.progress += 10 * rankDifference * rankDifference; // Activity is higher rank
+    }
+
+    // Handle rank progression
+    this.updateRankAndProgress();
+  }
+
+  // Helper method to calculate the rank difference between the user and the activity
+  calculateRankDifference(activityRank) {
+    const currentRankIndex = this.getRankIndex(this.rank);
+    const activityRankIndex = this.getRankIndex(activityRank);
+    return activityRankIndex - currentRankIndex;
+  }
+
+  // Helper method to convert rank to index for easier calculation
+  getRankIndex(rank) {
+    return rank > 0 ? rank + 7 : rank + 8;
+  }
+
+  // Helper method to convert index back to rank
+  getRankFromIndex(index) {
+    return index > 7 ? index - 7 : index - 8;
+  }
+
+  // Helper method to update rank and progress
+  updateRankAndProgress() {
+    while (this.progress >= 100) {
+      this.progress -= 100;
+      this.rank = this.getNextRank();
+
+      // If the user reaches rank 8, progress is reset and capped
+      if (this.rank === 8) {
+        this.progress = 0;
+        break;
+      }
+    }
+  }
+
+  // Helper method to get the next rank, skipping rank 0
+  getNextRank() {
+    if (this.rank === -1) {
+      return 1; // Skip rank 0
+    } else {
+      return this.rank + 1;
+    }
+  }
+}
+
+// Example usage:
+let user = new User();
+console.log(user.rank); // -8
+console.log(user.progress); // 0
+
+user.incProgress(-7);
+console.log(user.progress); // 10
+
+user.incProgress(1);
+console.log(user.rank); // -2 (fixed issue)
