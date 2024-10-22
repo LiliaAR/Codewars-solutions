@@ -1,0 +1,51 @@
+function knight(start, finish) {
+    // Convert algebraic notation to 0-indexed row and column
+    const notationToCoords = (pos) => {
+        const col = pos.charCodeAt(0) - 'a'.charCodeAt(0); // e.g., 'a' -> 0, 'h' -> 7
+        const row = parseInt(pos[1], 10) - 1; // e.g., '1' -> 0, '8' -> 7
+        return [row, col];
+    };
+
+    const [startRow, startCol] = notationToCoords(start);
+    const [endRow, endCol] = notationToCoords(finish);
+
+    // If the start and finish are the same, no moves needed
+    if (startRow === endRow && startCol === endCol) return 0;
+
+    // All possible knight moves
+    const moves = [
+        [2, 1], [2, -1], [-2, 1], [-2, -1],
+        [1, 2], [1, -2], [-1, 2], [-1, -2]
+    ];
+
+    // BFS setup
+    const queue = [[startRow, startCol, 0]]; // [row, col, movesCount]
+    const visited = Array.from({ length: 8 }, () => Array(8).fill(false));
+    visited[startRow][startCol] = true;
+
+    // BFS loop
+    while (queue.length > 0) {
+        const [currentRow, currentCol, movesCount] = queue.shift();
+
+        for (const [dRow, dCol] of moves) {
+            const newRow = currentRow + dRow;
+            const newCol = currentCol + dCol;
+
+            // Check if the new position is on the board
+            if (newRow >= 0 && newRow < 8 && newCol >= 0 && newCol < 8) {
+                // If we reach the target position, return the moves count
+                if (newRow === endRow && newCol === endCol) {
+                    return movesCount + 1;
+                }
+
+                // If not visited, mark it as visited and add to queue
+                if (!visited[newRow][newCol]) {
+                    visited[newRow][newCol] = true;
+                    queue.push([newRow, newCol, movesCount + 1]);
+                }
+            }
+        }
+    }
+    
+    return -1; // This should never be reached for a valid chessboard
+}
