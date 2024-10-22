@@ -1,0 +1,46 @@
+function sumOfDivided(lst) {
+    const primeSums = {};
+
+    // Helper function to check if a number is prime
+    const isPrime = (n) => {
+        if (n < 2) return false;
+        for (let i = 2; i * i <= n; i++) {
+            if (n % i === 0) return false;
+        }
+        return true;
+    };
+
+    // Helper function to find prime factors of a number
+    const findPrimeFactors = (n) => {
+        const factors = new Set();
+        n = Math.abs(n);
+        for (let i = 2; i <= Math.sqrt(n); i++) {
+            while (n % i === 0) {
+                factors.add(i);
+                n /= i;
+            }
+        }
+        if (n > 1) factors.add(n); // If n is prime itself
+        return factors;
+    };
+
+    // Process each number in the list
+    for (const num of lst) {
+        const primeFactors = findPrimeFactors(num);
+        for (const prime of primeFactors) {
+            if (!primeSums[prime]) primeSums[prime] = 0;
+            primeSums[prime] += num;
+        }
+    }
+
+    // Create the result array and sort by prime
+    const result = Object.keys(primeSums)
+        .map(p => [parseInt(p), primeSums[p]])
+        .sort((a, b) => a[0] - b[0]);
+
+    return result;
+}
+
+// Test examples
+console.log(sumOfDivided([12, 15])); // Output: [[2, 12], [3, 27], [5, 15]]
+console.log(sumOfDivided([15, 30, -45])); // Output: [[2, 30], [3, 0], [5, 0]]
