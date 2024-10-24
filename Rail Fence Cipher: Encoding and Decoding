@@ -1,0 +1,71 @@
+function encodeRailFenceCipher(string, numberRails) {
+    if (string === "" || numberRails < 2) return string;
+
+    let rails = Array.from({ length: numberRails }, () => []);
+    let currentRail = 0;
+    let direction = 1; // 1 means down, -1 means up
+
+    for (let char of string) {
+        rails[currentRail].push(char);
+
+        // If we're at the top rail, change direction to down
+        // If we're at the bottom rail, change direction to up
+        if (currentRail === 0) {
+            direction = 1;
+        } else if (currentRail === numberRails - 1) {
+            direction = -1;
+        }
+        currentRail += direction;
+    }
+
+    // Concatenate all rails to form the encoded string
+    return rails.map(rail => rail.join("")).join("");
+}
+
+function decodeRailFenceCipher(string, numberRails) {
+    if (string === "" || numberRails < 2) return string;
+
+    let rails = Array.from({ length: numberRails }, () => []);
+    let currentRail = 0;
+    let direction = 1;
+    let positions = Array(string.length).fill(null);
+    
+    // Step 1: Determine the positions where the characters will be placed
+    for (let i = 0; i < string.length; i++) {
+        positions[i] = currentRail;
+        if (currentRail === 0) {
+            direction = 1;
+        } else if (currentRail === numberRails - 1) {
+            direction = -1;
+        }
+        currentRail += direction;
+    }
+
+    // Step 2: Fill the rails with the correct characters
+    let index = 0;
+    for (let railIndex = 0; railIndex < numberRails; railIndex++) {
+        for (let i = 0; i < string.length; i++) {
+            if (positions[i] === railIndex) {
+                rails[railIndex].push(string[index]);
+                index++;
+            }
+        }
+    }
+
+    // Step 3: Rebuild the original string by following the rail pattern
+    let result = [];
+    currentRail = 0;
+    direction = 1;
+    
+    for (let i = 0; i < string.length; i++) {
+        result.push(rails[currentRail].shift());
+        if (currentRail === 0) {
+            direction = 1;
+        } else if (currentRail === numberRails - 1) {
+            direction = -1;
+        }
+        currentRail += direction;
+    }
+
+    return result.join("");
+}
