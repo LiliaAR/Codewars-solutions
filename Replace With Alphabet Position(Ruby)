@@ -1,0 +1,10 @@
+def alphabet_position(text)
+  # Use downcase to handle both uppercase and lowercase letters
+  text.downcase.chars.map do |char|
+    # Check if the character is a letter
+    if ('a'..'z').include?(char)
+      # Calculate the position in the alphabet
+      (char.ord - 'a'.ord + 1).to_s
+    end
+  end.compact.join(' ')
+end
