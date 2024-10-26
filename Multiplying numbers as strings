@@ -1,0 +1,31 @@
+function multiply(a, b) {
+  // Edge case: if either number is "0", the result is "0"
+  if (a === "0" || b === "0") return "0";
+
+  // Convert the numbers to arrays of digits, reversed for easier manipulation
+  const num1 = a.split('').reverse();
+  const num2 = b.split('').reverse();
+  const result = Array(num1.length + num2.length).fill(0);
+
+  // Perform the multiplication digit by digit
+  for (let i = 0; i < num1.length; i++) {
+    for (let j = 0; j < num2.length; j++) {
+      // Multiply the digits and add to the correct position in result array
+      result[i + j] += num1[i] * num2[j];
+      
+      // Handle carry over
+      if (result[i + j] >= 10) {
+        result[i + j + 1] += Math.floor(result[i + j] / 10);
+        result[i + j] %= 10;
+      }
+    }
+  }
+
+  // Remove leading zeros and convert result array to string
+  while (result[result.length - 1] === 0) {
+    result.pop();
+  }
+
+  // Reverse result and join to form the final string
+  return result.reverse().join('');
+}
