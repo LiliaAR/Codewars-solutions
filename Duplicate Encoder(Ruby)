@@ -1,0 +1,7 @@
+def duplicate_encode(word)
+  # Convert the word to lowercase and count the occurrences of each character
+  counts = word.downcase.chars.tally
+
+  # Map each character to "(" or ")" based on its count
+  word.chars.map { |char| counts[char.downcase] == 1 ? '(' : ')' }.join
+end
