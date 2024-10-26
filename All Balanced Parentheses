@@ -1,0 +1,26 @@
+function balancedParens(n) {
+  const result = [];
+
+  function generate(current, open, close) {
+    // Base case: when we have a complete balanced combination
+    if (current.length === n * 2) {
+      result.push(current);
+      return;
+    }
+    
+    // Add an opening parenthesis if we still have some left
+    if (open < n) {
+      generate(current + '(', open + 1, close);
+    }
+    
+    // Add a closing parenthesis if it doesn't exceed the open count
+    if (close < open) {
+      generate(current + ')', open, close + 1);
+    }
+  }
+
+  // Initialize recursion
+  generate('', 0, 0);
+
+  return result;
+}
