@@ -1,0 +1,38 @@
+function justify(text, width) {
+  const words = text.split(" ");
+  const lines = [];
+  let line = [];
+  let lineLength = 0;
+
+  for (let word of words) {
+    // Check if adding the next word would exceed the line width
+    if (lineLength + word.length + line.length > width) {
+      // Distribute spaces for the current line
+      let spacesNeeded = width - lineLength;
+      let gaps = line.length - 1;
+      if (gaps > 0) {
+        let spacesPerGap = Math.floor(spacesNeeded / gaps);
+        let extraSpaces = spacesNeeded % gaps;
+
+        for (let i = 0; i < gaps; i++) {
+          line[i] += " ".repeat(spacesPerGap + (i < extraSpaces ? 1 : 0));
+        }
+      }
+
+      lines.push(line.join(""));
+      line = [];
+      lineLength = 0;
+    }
+
+    // Add the current word to the line
+    line.push(word);
+    lineLength += word.length;
+  }
+
+  // Add the last line without justification
+  if (line.length > 0) {
+    lines.push(line.join(" "));
+  }
+
+  return lines.join("\n");
+}
