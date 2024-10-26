@@ -1,0 +1,25 @@
+def sum_dig_pow(a, b)
+  results = []
+
+  (a..b).each do |num|
+    digits = num.to_s.chars.map(&:to_i)  # Convert the number to an array of its digits
+    sum = 0
+
+    digits.each_with_index do |digit, index|
+      sum += digit**(index + 1)  # Raise the digit to the power of its position (1-indexed)
+    end
+
+    results << num if sum == num  # Check if the sum matches the original number
+  end
+
+  results  # Return the collected results
+end
+
+# Example usage
+puts sum_dig_pow(1, 10).inspect  # Output: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+puts sum_dig_pow(1, 100).inspect # Output: [1, 2, 3, 4, 5, 6, 7, 8, 9, 89]
+puts sum_dig_pow(10, 100).inspect # Output: [89]
+puts sum_dig_pow(90, 100).inspect # Output: []
+puts sum_dig_pow(90, 150).inspect # Output: [135]
+puts sum_dig_pow(50, 150).inspect # Output: [89, 135]
+puts sum_dig_pow(10, 150).inspect # Output: [89, 135]
