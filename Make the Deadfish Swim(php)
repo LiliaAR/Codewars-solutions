@@ -1,0 +1,26 @@
+<?php
+function parse($program) {
+    $value = 0;          // Initial value in memory
+    $result = [];        // Array to store output values
+
+    // Iterate through each character in the program string
+    for ($i = 0; $i < strlen($program); $i++) {
+        switch ($program[$i]) {
+            case 'i':    // Increment
+                $value++;
+                break;
+            case 'd':    // Decrement
+                $value--;
+                break;
+            case 's':    // Square
+                $value *= $value;
+                break;
+            case 'o':    // Output
+                $result[] = $value;
+                break;
+            // Ignore all other characters (no-op)
+        }
+    }
+
+    return $result;
+}
