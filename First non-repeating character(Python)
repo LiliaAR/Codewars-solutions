@@ -1,0 +1,13 @@
+def first_non_repeating_letter(s):
+    # Convert the string to lowercase and count occurrences
+    count = {}
+    for char in s:
+        lower_char = char.lower()
+        count[lower_char] = count.get(lower_char, 0) + 1
+
+    # Find the first non-repeating character in the original string
+    for char in s:
+        if count[char.lower()] == 1:
+            return char
+
+    return ""
