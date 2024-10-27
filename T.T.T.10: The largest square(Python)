@@ -1,0 +1,20 @@
+def _max(wall):
+    if not wall or not wall[0]:
+        return 0
+
+    n, m = len(wall), len(wall[0])
+    dp = [[0] * m for _ in range(n)]
+    max_square_size = 0
+
+    # Fill in the dp table
+    for i in range(n):
+        for j in range(m):
+            if wall[i][j] == " ":
+                if i == 0 or j == 0:
+                    dp[i][j] = 1
+                else:
+                    dp[i][j] = min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1]) + 1
+                max_square_size = max(max_square_size, dp[i][j])
+
+    # Area of the largest square
+    return max_square_size * max_square_size
