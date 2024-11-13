@@ -1,0 +1,61 @@
+function sudoku(puzzle) {
+  // Helper function to check if a number can be placed at a given position
+  function isValid(num, row, col) {
+    // Check the row and column
+    for (let i = 0; i < 9; i++) {
+      if (puzzle[row][i] === num || puzzle[i][col] === num) {
+        return false;
+      }
+    }
+    // Check the 3x3 sub-grid
+    const startRow = Math.floor(row / 3) * 3;
+    const startCol = Math.floor(col / 3) * 3;
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 3; j++) {
+        if (puzzle[startRow + i][startCol + j] === num) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
+  // Main recursive function to solve the puzzle
+  function solve() {
+    for (let row = 0; row < 9; row++) {
+      for (let col = 0; col < 9; col++) {
+        if (puzzle[row][col] === 0) { // Find an empty cell
+          for (let num = 1; num <= 9; num++) { // Try numbers 1 through 9
+            if (isValid(num, row, col)) { // Check if the number is valid
+              puzzle[row][col] = num; // Place the number
+              if (solve()) { // Recursively try to complete the puzzle
+                return true;
+              }
+              puzzle[row][col] = 0; // Reset the cell on backtrack
+            }
+          }
+          return false; // No valid number found, trigger backtracking
+        }
+      }
+    }
+    return true; // Puzzle solved
+  }
+
+  solve();
+  return puzzle;
+}
+
+// Example puzzle
+const puzzle = [
+  [5,3,0,0,7,0,0,0,0],
+  [6,0,0,1,9,5,0,0,0],
+  [0,9,8,0,0,0,0,6,0],
+  [8,0,0,0,6,0,0,0,3],
+  [4,0,0,8,0,3,0,0,1],
+  [7,0,0,0,2,0,0,0,6],
+  [0,6,0,0,0,0,2,8,0],
+  [0,0,0,4,1,9,0,0,5],
+  [0,0,0,0,8,0,0,7,9]
+];
+
+console.log(sudoku(puzzle));
