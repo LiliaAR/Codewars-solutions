@@ -1,0 +1,22 @@
+<?php
+function solution($number) {
+    // Return 0 for negative numbers
+    if ($number < 0) {
+        return 0;
+    }
+
+    $sum = 0;
+
+    // Loop through all numbers below the given number
+    for ($i = 0; $i < $number; $i++) {
+        // Check if the number is divisible by 3 or 5
+        if ($i % 3 == 0 || $i % 5 == 0) {
+            $sum += $i;
+        }
+    }
+
+    return $sum;
+}
+
+// Example usage
+echo solution(10); // Output: 23
